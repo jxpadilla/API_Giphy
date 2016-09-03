@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Olympic Events</title>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+</head>
+
+<body>
+
+<!--     <div id = "olympicSports">
+    </div> -->
+
+    <form id = "olympics">
+        <label form="olympicSports">Add an Olympic Sport:</label>
+        <input type="text" id="olympicSports">
+        <button id="addSport">Submit</button>
+    </form>
+
+    <br>
+
+    <div id = "sports">
+    <button data-olympics="soccer">Futbol</button>
+    <button data-olympics="judo">Judo</button>
+    <button data-olympics="marathon">Marathon</button>
+
+    </div>
+    <div id="gifContainer"></div>
+
+    <script type="text/javascript">
+
+    $("#sports").on("click", "button", function() {
+        var x = $(this).data("olympics");
+
+        var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + x + "&api_key=dc6zaTOxFJmzC&limit=10";
+
+        $.ajax({
+                url: queryURL,
+                method: 'GET'
+            })
+            .done(function(response) {
+                console.log(response);
+                for (var i = 0; i < response.data.length; i++) {
+                    var olympicDiv = $('<div>');
+                    var p = $('<p>').text("Rating: " + response.data[i].rating);
+                    var olympicImage = $('<img>');
+                   olympicImage.attr('src', response.data[i].images.fixed_height.url);
+                    olympicDiv.append(p);
+                    olympicDiv.append(olympicImage);
+                    $("#gifContainer").append(olympicDiv);
+                }
+            });
+    });
+    //attach a click handler to add "addEntry" button to a id=sports
+    $("#addSport").on("click",function(event){
+            console.log("click")
+    //get value of new entry
+            var addEntry = $("#olympicSports").val().trim();
+            console.log(addEntry);
+    //create a conditional statement if length of olympicSports is greater than 0
+            if (addEntry.length > 0) {
+
+                var sportTemplate = $ ('<button>').attr("data-olympics",addEntry).html(addEntry);
+                $("#sports").append(sportTemplate);
+            }
+            return false;
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
